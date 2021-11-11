@@ -14,11 +14,14 @@ public class Proyecto2 {
     static Scanner w = new Scanner(System.in);
    
     public static void main(String[] args) throws ClassNotFoundException {
+        
+        
+        
         registro();
         Lectura();
      
-        //Este ha sido lo maximo que llegue, no pude llegar sin usar arraylist o list, no pude analizar los datos porque se reescriben, y creo que me queda pendiente aprender mejor esto
-        //espero poder aprenderlo nuevoa mente el proximo semestre, ante todo gracias ingeniero;
+        //Este ha sido lo maximo que llegue, no pude llegar sin usar arraylist o list, solo un imitador de eso; 
+        //espero poder aprender este tema nuevamente el proximo semestre, ante todo gracias ingeniero;
         
         
         
@@ -34,7 +37,11 @@ public class Proyecto2 {
     
     
     public static void registro(){
-        try{   
+        try{
+        int dinamic = 0;
+        String bool;
+        do{
+        lista[] coleccion = new lista[dinamic+1];    
         final Estudiante nuevo = new Estudiante();
         System.out.println("Bienvenido al Registro de datos");
         System.out.println("Ingrese los siguientes datos del estudiante: ");
@@ -62,9 +69,18 @@ public class Proyecto2 {
         nuevo.cursosreprobados();
         
         System.out.println("{ " +nuevo.toString() + " } " + nuevo.getbuenos() + nuevo.getmalos());//el master
+        coleccion[dinamic] = new lista(nuevo);
+        
+        
+        
+        System.out.println("Desea ingresar un nuevo registro?");
+        bool = w.next().toLowerCase();
+        
             try (ObjectOutputStream Estu = new ObjectOutputStream(Files.newOutputStream(Paths.get("Estudiantes.prj")))) {
-                Estu.writeObject(nuevo);//se guarda el estudiante con todos sus cursos
+                Estu.writeObject(coleccion[dinamic]);//se guarda el estudiante con todos sus cursos
             } //el segundo try fue recomendacion de netbeans
+        dinamic=dinamic + 1;    
+     }while("s".equals(bool));
     }
         
         catch(IOException error){
@@ -76,10 +92,10 @@ public class Proyecto2 {
     public static void Lectura() throws ClassNotFoundException{
         try {
             ObjectInputStream Est_list = new ObjectInputStream(Files.newInputStream(Paths.get("Estudiantes.prj")));
-            Estudiante nuevo = (Estudiante) Est_list.readObject();
+            lista nuevo = (lista) Est_list.readObject();
             System.out.println(nuevo);
-            System.out.println(Arrays.toString(nuevo.getNuevos()));
-            System.out.println(Arrays.toString(nuevo.getPerdidos()));
+            System.out.println(Arrays.toString(nuevo.getNuevo().getNuevos()));
+            System.out.println(Arrays.toString(nuevo.getNuevo().getPerdidos() ));
             
         } catch (IOException ex) {
             Logger.getLogger(Proyecto2.class.getName()).log(Level.SEVERE, null, ex);
