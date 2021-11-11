@@ -1,22 +1,35 @@
 package proyecto2;
 
 import java.io.Serializable;
+import static proyecto2.Proyecto2.w;
 
 
 public class Estudiante implements Serializable{
-    String Nombres;
-    String Apellidos;
-    String Carne;
-    int Edad;
-    String  Sexo;
-    String  Carrera;
-    int Totalcreditos;
-    int Totalcursosaprobados;
-    int Totalcursosreprobados;
-    CursoAp[] cursosap;
-
+    private String Nombres;
+    private String Apellidos;
+    private String Carne;
+    private int Edad;
+    private String  Sexo;
+    private String  Carrera;
+    private int Totalcreditos;
+    private int Totalcursosaprobados;
+    private int Totalcursosreprobados;
+    private CursoAp[] nuevos = new CursoAp[getTotalcursosaprobados()];
+    private CursoRep[] perdidos = new CursoRep[getTotalcursosreprobados()];
+    private String curvisa = "";
+    private String curvisre = "";
     
+    
+    public CursoAp[] getNuevos() {
+        return nuevos;
+    }
 
+    public CursoRep[] getPerdidos() {
+        return perdidos;
+    }
+    
+    
+    
     public void setNombres(String Nombres) {
         this.Nombres = Nombres;
     }
@@ -93,157 +106,67 @@ public class Estudiante implements Serializable{
     
     
     
+    
+    public void cursosaprobados(){
+        nuevos = new CursoAp[getTotalcursosaprobados()];//esta onda es para hacerle un override al valor del variable, rellamando al total cursos aprobados
+        for (int i = 0; i < getTotalcursosaprobados() ; i++) {//mando a llamar al metodo que determina el ancho de mi array mas arriba
+            nuevos[i] = new CursoAp();
+            System.out.println("semestre al que pertenece el curso: ");
+            nuevos[i].setSemestre(w.nextLine());
+            System.out.println("nombre del curso: ");
+            nuevos[i].setNombrecursoap(w.nextLine());
+            System.out.println("codigo del curso");
+            nuevos[i].setCodcurso(w.nextLine());
+            System.out.println("Zona obtenida por el estudiante: ");
+            nuevos[i].setZonaap(Double.valueOf(w.nextLine()));
+            System.out.println("Nota de examen final obtenida por el estudiante: ");
+            nuevos[i].setExamen(Double.valueOf(w.nextLine()));
+            System.out.println("Fecha de aprobacion del alumno: ");
+            nuevos[i].setFechaap(w.nextLine());
+        }
+    }
+    
+    public void cursosreprobados(){
+        perdidos = new CursoRep[getTotalcursosreprobados()];
+    for (int i = 0; i < getTotalcursosreprobados() ; i++) {//misma operacion solo que con reprobados
+            perdidos[i] = new CursoRep();
+            System.out.println("semestre al que pertenece el curso: ");
+            perdidos[i].setSemestre(w.nextLine());
+            System.out.println("nombre del curso: ");
+            perdidos[i].setNombrecursorp(w.nextLine());
+            System.out.println("codigo del curso");
+            perdidos[i].setCodcurso(w.nextLine());
+            System.out.println("Zona obtenida por el estudiante: ");
+            perdidos[i].setZonarp(Double.valueOf(w.nextLine()));
+            System.out.println("Nota de examen final obtenida por el estudiante: ");
+            perdidos[i].setExamen(Double.valueOf(w.nextLine()));
+            System.out.println("Fecha En que se reprobo: ");
+            perdidos[i].setFecharp(w.nextLine());
+        }
+    }
+
+    public String getbuenos(){
+    for(CursoAp nu: nuevos){
+        curvisa = curvisa+ "{ " + nu.toString() + " }";
+    }
+    
+    
+    return curvisa;
+    }
+    
+    public String getmalos(){
+    for(CursoRep metal: perdidos){
+        curvisre = curvisre + "{ " + metal.toString() + " }";
+    }
+    return curvisre;
+    }
    
-    public static class CursoAp implements Serializable{
-    String semestre;
-    String nombrecursoap;
-    String codcurso;
-    double zonaap;
-    double examen;
-    String fechaap;
-
-        public CursoAp() {
-        }
-
-        public double getExamen() {
-            return examen;
-        }
-
-        public void setExamen(double examen) {
-            this.examen = examen;
-        }
-
-        public String getSemestre() {
-            return semestre;
-        }
-
-        public void setSemestre(String semestre) {
-            this.semestre = semestre;
-        }
-    
-
-        
-
-        public String getNombrecursoap() {
-            return nombrecursoap;
-        }
-
-        public void setNombrecursoap(String nombrecursoap) {
-            this.nombrecursoap = nombrecursoap;
-        }
-
-        public String getCodcurso() {
-            return codcurso;
-        }
-
-        public void setCodcurso(String codcurso) {
-            this.codcurso = codcurso;
-        }
-
-        public double getZonaap() {
-            return zonaap;
-        }
-
-        public void setZonaap(double zonaap) {
-            this.zonaap = zonaap;
-        }
-
-        public String getFechaap() {
-            return fechaap;
-        }
-
-        public void setFechaap(String fechaap) {
-            this.fechaap = fechaap;
-        }
-    
-        @Override
-        public String toString(){
-        StringBuilder a = new StringBuilder();
-        a.append("Semestre: ").append(semestre);
-        a.append(", nombre del curso: ").append(nombrecursoap);
-        a.append(", codigo del curso: ").append(codcurso);
-        a.append(", zona: ").append(zonaap);
-        a.append(", examenFinal nota: ").append(examen);
-        a.append(", Fecha de Aprobacion: ").append(fechaap);
-        return a.toString();
-        }
-        
-    }
     
     
     
     
-    public static class CursoRep implements Serializable{
-    String semestre;
-    String nombrecursorp;
-    String codcurso;
-    double zonarp;
-    double examen;
-    String fecharp;
-
-        public double getExamen() {
-            return examen;
-        }
-
-        public void setExamen(double examen) {
-            this.examen = examen;
-        }
-
     
     
-        public String getSemestre() {
-            return semestre;
-        }
-
-        public void setSemestre(String semestre) {
-            this.semestre = semestre;
-        }
-
-        public String getNombrecursorp() {
-            return nombrecursorp;
-        }
-
-        public void setNombrecursorp(String nombrecursorp) {
-            this.nombrecursorp = nombrecursorp;
-        }
-
-        public String getCodcurso() {
-            return codcurso;
-        }
-
-        public void setCodcurso(String codcurso) {
-            this.codcurso = codcurso;
-        }
-
-        public double getZonarp() {
-            return zonarp;
-        }
-
-        public void setZonarp(double zonarp) {
-            this.zonarp = zonarp;
-        }
-
-        public String getFecharp() {
-            return fecharp;
-        }
-
-        public void setFecharp(String fecharp) {
-            this.fecharp = fecharp;
-        }
-    
-    @Override
-        public String toString(){
-        StringBuilder a = new StringBuilder();
-        a.append("Semestre: ").append(semestre);
-        a.append(", nombre del curso: ").append(nombrecursorp);
-        a.append(", codigo del curso: ").append(codcurso);
-        a.append(", zona: ").append(zonarp);
-        a.append(", examenFinal nota: ").append(examen);
-        a.append(", Fecha de Repruebo: ").append(fecharp);
-        return a.toString();
-        }
-    
-    }
     
     @Override
     public String toString(){

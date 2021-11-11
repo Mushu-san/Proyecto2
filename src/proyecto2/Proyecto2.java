@@ -4,19 +4,21 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Proyecto2 {
     static Scanner w = new Scanner(System.in);
    
     public static void main(String[] args) throws ClassNotFoundException {
-     
         registro();
+        Lectura();
      
-     
-     
-        
+        //Este ha sido lo maximo que llegue, no pude llegar sin usar arraylist o list, no pude analizar los datos porque se reescriben, y creo que me queda pendiente aprender mejor esto
+        //espero poder aprenderlo nuevoa mente el proximo semestre, ante todo gracias ingeniero;
         
         
         
@@ -32,9 +34,8 @@ public class Proyecto2 {
     
     
     public static void registro(){
-        try{   Estudiante nuevo = new Estudiante();
-        String curvisa = "";
-        String curvisre = "";
+        try{   
+        final Estudiante nuevo = new Estudiante();
         System.out.println("Bienvenido al Registro de datos");
         System.out.println("Ingrese los siguientes datos del estudiante: ");
         System.out.println("\nNombres: ");
@@ -53,64 +54,17 @@ public class Proyecto2 {
         nuevo.setTotalcreditos(Integer.parseInt(w.nextLine()));
         System.out.println("Total de Cursos Aprobados: ");
         nuevo.setTotalcursosaprobados(Integer.parseInt(w.nextLine()));
-        final int N = nuevo.getTotalcursosaprobados();//consigo el dato para el iterador y lo meto en una variable para no confundirme tanto
         System.out.println("Total de Cursos Reprobados: ");
         nuevo.setTotalcursosreprobados(Integer.parseInt(w.nextLine()));
-        final int M = nuevo.getTotalcursosreprobados();
         System.out.println("\nIngrese los siguientes datos de los cursos aprobados");
-        Estudiante.CursoAp[] cursoap = new Estudiante.CursoAp[N];//se crea un array de cursos aprobados dentro del objeto nuevo
-        for (int i = 0; i < N ; i++) {
-            cursoap[i] = new Estudiante.CursoAp();
-            System.out.println("semestre al que pertenece el curso: ");
-            cursoap[i].setSemestre(w.nextLine());
-            System.out.println("nombre del curso: ");
-            cursoap[i].setNombrecursoap(w.nextLine());
-            System.out.println("codigo del curso");
-            cursoap[i].setCodcurso(w.nextLine());
-            System.out.println("Zona obtenida por el estudiante: ");
-            cursoap[i].setZonaap(Double.valueOf(w.nextLine()));
-            System.out.println("Nota de examen final obtenida por el estudiante: ");
-            cursoap[i].setExamen(Double.valueOf(w.nextLine()));
-            System.out.println("Fecha de aprobacion del alumno: ");
-            cursoap[i].setFechaap(w.nextLine());
-        }
+        nuevo.cursosaprobados();
         System.out.println("\nIngrese los siguientes datos de los cursos reprobados");
-        Estudiante.CursoRep[] cursoreprobado = new Estudiante.CursoRep[M];
-        for (int i = 0; i < M ; i++) {//misma operacion solo que con reprobados
-            cursoreprobado[i] = new Estudiante.CursoRep();
-            System.out.println("semestre al que pertenece el curso: ");
-            cursoreprobado[i].setSemestre(w.nextLine());
-            System.out.println("nombre del curso: ");
-            cursoreprobado[i].setNombrecursorp(w.nextLine());
-            System.out.println("codigo del curso");
-            cursoreprobado[i].setCodcurso(w.nextLine());
-            System.out.println("Zona obtenida por el estudiante: ");
-            cursoreprobado[i].setZonarp(Double.valueOf(w.nextLine()));
-            System.out.println("Nota de examen final obtenida por el estudiante: ");
-            cursoreprobado[i].setExamen(Double.valueOf(w.nextLine()));
-            System.out.println("Fecha En que se reprobo: ");
-            cursoreprobado[i].setFecharp(w.nextLine());
-        }
-        for (int i = 0; i < N; i++) {
-            curvisa = curvisa+ "{ " + cursoap[i].toString() + " }";
-        }
-        for (int i = 0; i < M; i++) {
-            curvisre = curvisre + "{ " + cursoreprobado[i].toString() + " }";
-        }
-        System.out.println("{ " +nuevo.toString() + " } " + curvisa + curvisre);
+        nuevo.cursosreprobados();
         
-        ObjectOutputStream Estu = new ObjectOutputStream(Files.newOutputStream(Paths.get("Estudiantes.txt")));
-        Estu.writeObject(nuevo);
-        for (int i = 0; i < N; i++) {
-            Estu.writeObject(cursoap[i]);
-        }
-        for (int i = 0; i < M; i++) {
-            Estu.writeObject(cursoreprobado[i]);
-        }
-        Estu.close();
-        
-        
-        
+        System.out.println("{ " +nuevo.toString() + " } " + nuevo.getbuenos() + nuevo.getmalos());//el master
+            try (ObjectOutputStream Estu = new ObjectOutputStream(Files.newOutputStream(Paths.get("Estudiantes.prj")))) {
+                Estu.writeObject(nuevo);//se guarda el estudiante con todos sus cursos
+            } //el segundo try fue recomendacion de netbeans
     }
         
         catch(IOException error){
@@ -119,7 +73,21 @@ public class Proyecto2 {
         
     }
     
+    public static void Lectura() throws ClassNotFoundException{
+        try {
+            ObjectInputStream Est_list = new ObjectInputStream(Files.newInputStream(Paths.get("Estudiantes.prj")));
+            Estudiante nuevo = (Estudiante) Est_list.readObject();
+            System.out.println(nuevo);
+            System.out.println(Arrays.toString(nuevo.getNuevos()));
+            System.out.println(Arrays.toString(nuevo.getPerdidos()));
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Proyecto2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     
+    
+    }
     
   
 }
